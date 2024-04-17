@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "330649711616",
-    "project_id": "tareegoff",
-    "storage_bucket": "tareegoff.appspot.com"
+    "project_number": "710785220796",
+    "project_id": "tareeq-c4fbd",
+    "storage_bucket": "tareeq-c4fbd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:330649711616:android:cd5beab650dab66e8ad4e5",
+        "mobilesdk_app_id": "1:710785220796:android:f4144c4ef95b804ba550b9",
         "android_client_info": {
           "package_name": "com.example.learn_firebase2"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC-rUpY31DIrWwmRVtMwZGishhS-DQpBEc"
+          "current_key": "AIzaSyDejpQM_EedgtqDDHQ5XgACh6f7ouCuh3I"
         }
       ],
       "services": {
