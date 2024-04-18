@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:learn_firebase2/auth/homepage.dart';
 import 'package:learn_firebase2/auth/loginn.dart';
+import 'package:learn_firebase2/auth/homepage.dart';
 
 void main() async{
  WidgetsFlutterBinding.ensureInitialized();
@@ -11,8 +11,8 @@ void main() async{
     apiKey: 'AIzaSyDejpQM_EedgtqDDHQ5XgACh6f7ouCuh3I',
     appId: '1:710785220796:android:f4144c4ef95b804ba550b9',
     messagingSenderId: 'sendid',
-    projectId: 'myapp',
-    storageBucket: 'myapp-b9yt18.appspot.com',
+    projectId: 'tareeq-c4fbd',
+    storageBucket: 'tareeq-c4fbd.appspot.com',
   )
     );
   runApp(const MyApp());

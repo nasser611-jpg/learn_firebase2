@@ -1,21 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:learn_firebase2/auth/homepage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AddCategory extends StatelessWidget {
    AddCategory({Key? key}) : super(key: key);
 TextEditingController catController=TextEditingController();
-      CollectionReference users = FirebaseFirestore.instance.collection('categories');
+      CollectionReference user= FirebaseFirestore.instance.collection('categories');
 
-    Future<void> addUser() {
-      // Call the user's CollectionReference to add a new user
-      return users
-          .add({
-            'name': catController.text, // John Doe
-            // 42
-          })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
-    }
+  addCategory()async{
+try{
+DocumentReference response=await  user.add({
+  'name':catController.text,
+  'id':FirebaseAuth.instance.currentUser!.uid
+});
+
+}catch(e){
+  print('Erorr $e');
+}
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(title: Text('Add Category'),),
@@ -37,7 +43,10 @@ TextEditingController catController=TextEditingController();
             
                 ),
     
-    TextButton(onPressed: addUser, child: const Text('Add'))
+    TextButton(onPressed:(){
+      addCategory();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+    } , child: const Text('Add'))
     ],),
     );
   }

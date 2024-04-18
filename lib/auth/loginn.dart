@@ -53,21 +53,36 @@ if(googleUser==null){
       },
     );
   }
+   bool isLoading=false;
   void _submitForm() async{
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     try {
+      isLoading=true;
+setState(() {
+  
+});
   final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
     email: _email,
     password: _password
   );
+isLoading=false;
+setState(() {
+  
+});
   if(credential.user!.emailVerified){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+  
+   Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
 
   }else{
     showErrorDialog(context, 'please go to your Email and click verified link');
   }
+  
 } on FirebaseAuthException catch (e) {
+  isLoading=false;
+setState(() {
+  
+});
   if (e.code == 'user-not-found') {
     print('user not found');
 showErrorDialog(context, 'المستخدم غير موحود');
@@ -89,9 +104,9 @@ showErrorDialog(context, 'المستخدم غير موحود');
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(16.0),
           child: SingleChildScrollView(
-            child: Column(
+            child: isLoading?Center(child: CircularProgressIndicator(),):Column (
               children: [
                 TextFormField(
                   controller: emailController,

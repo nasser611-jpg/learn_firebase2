@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learn_firebase2/auth/loginn.dart';
-import 'package:learn_firebase2/auth/update.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:learn_firebase2/auth/adminpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_firebase2/auth/add_category.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class AdminPage extends StatefulWidget {
+  const AdminPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AdminPage> createState() => _AdminPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AdminPageState extends State<AdminPage> {
   List<QueryDocumentSnapshot> data=[];
   bool isLoading=true;
 getData()async{
   QuerySnapshot querySnapshot=
  await FirebaseFirestore.instance
-    .collection('categories').where('id',isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .collection('categories')
     .get();
 
     data.addAll(querySnapshot.docs);
@@ -47,10 +45,6 @@ setState(() {
     ),
       appBar: AppBar(
         actions: [
-          //try admin page
-          IconButton(onPressed:(){
- Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage(),));
-          }, icon: Icon(Icons.admin_panel_settings)),
           IconButton(
              onPressed: () async {
   Navigator.push(
@@ -74,7 +68,7 @@ setState(() {
 ,
               icon: Icon(Icons.exit_to_app))
         ],
-        title: Text('HomePage'),
+        title: Text('AdminPage'),
       ),
       body:Center(
         child: isLoading?CircularProgressIndicator() :GridView.builder(
@@ -98,11 +92,10 @@ setState(() {
                       btnOkOnPress: () async{
                       await FirebaseFirestore.instance
     .collection('categories').doc(data[index].id).delete();
-Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage(),));
                       },
                       btnCancelOnPress: () {
                         print('cancel');
-                       
                       },
                     ).show();
             },
@@ -112,11 +105,9 @@ Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Column(
                   children: [
-                    
                     Icon(Icons.folder,size: 30,),
                     SizedBox(height: 5,),
                     Text(data[index]['name'].toString()),
-                  
                   ],
                 ),
               ),
