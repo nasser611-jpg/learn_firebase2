@@ -1,38 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:learn_firebase2/auth/homepage.dart';
+import 'package:learn_firebase2/note/view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-class UpdateCategorey extends StatefulWidget {
-  final String  uid;
-   UpdateCategorey({Key? key, required this.uid}) : super(key: key);
-
+class AddNote extends StatefulWidget {
+   AddNote({Key? key, required this.docId}) : super(key: key);
+final String docId;
   @override
-  State<UpdateCategorey> createState() => _UpdateCategoreyState();
+  State<AddNote> createState() => _AddNoteState();
 }
 
-class _UpdateCategoreyState extends State<UpdateCategorey> {
-TextEditingController catController=TextEditingController();
+class _AddNoteState extends State<AddNote> {
+TextEditingController noteController=TextEditingController();
 
-      CollectionReference user= FirebaseFirestore.instance.collection('categories');
 
-  updateCategory()async{
+  addNote()async{
 try{
-await  user.doc(widget.uid).update({
-'name':catController.text
+        CollectionReference collNote= FirebaseFirestore.instance.collection('categories').doc(widget.docId).collection('note');
+
+DocumentReference response=await  collNote.add({
+  'note':noteController.text,
+
 });
 
 }catch(e){
   print('Erorr $e');
 }
   }
-
+@override
+  void dispose() {
+ noteController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(title: Text('Add Category'),),
     body: Column(children: [
            TextFormField(
-                  controller: catController,
+                  controller: noteController,
                   decoration: InputDecoration(
                     labelText: 'catagory',
                     hintText: 'Enter your catagory',
@@ -49,9 +54,9 @@ await  user.doc(widget.uid).update({
                 ),
     
     TextButton(onPressed:(){
-      updateCategory();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
-    } , child: const Text('save'))
+      addNote();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(catId: widget.docId,),));
+    } , child: const Text('Add'))
     ],),
     );
   }

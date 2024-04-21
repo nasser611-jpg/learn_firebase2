@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:learn_firebase2/note/view.dart';
+import 'package:learn_firebase2/note/add.dart';
+import 'package:learn_firebase2/note/edit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learn_firebase2/auth/loginn.dart';
-import 'package:learn_firebase2/auth/update.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learn_firebase2/auth/adminpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:learn_firebase2/auth/add_category.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+class ViewNote extends StatefulWidget {
+  const ViewNote({Key? key, required this.catId}) : super(key: key);
+ final String catId;
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ViewNote> createState() => _ViewNoteState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ViewNoteState extends State<ViewNote> {
   List<QueryDocumentSnapshot> data=[];
   bool isLoading=true;
 getData()async{
   QuerySnapshot querySnapshot=
  await FirebaseFirestore.instance
-    .collection('categories').where('id',isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    .get();
-
+    .collection('categories').doc(widget.catId).collection('note').get();
     data.addAll(querySnapshot.docs);
     isLoading=false;
 setState(() {
@@ -38,12 +35,9 @@ setState(() {
     super.initState();
   }
   Widget build(BuildContext context) {
-    return Container(
-
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        floatingActionButton: FloatingActionButton(onPressed:(){
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>AddCategory(),)
+    return SafeArea(
+      child: Scaffold(floatingActionButton: FloatingActionButton(onPressed:(){
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>AddNote(docId: widget.catId,),)
         
         );
         
@@ -79,7 +73,7 @@ setState(() {
       ,
                 icon: Icon(Icons.exit_to_app))
           ],
-          title: Text('HomePage'),
+          title: Text('ViewNote'),
         ),
         body:Center(
           child: isLoading?CircularProgressIndicator() :GridView.builder(
@@ -91,34 +85,36 @@ setState(() {
           ),
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ViewNote(catId: data[index].id);
-                },));
-              },
               onLongPress: () {
-                AwesomeDialog(
+                   AwesomeDialog(
                         context: context,
                         dialogType: DialogType.warning,
                         animType: AnimType.rightSlide,
                         headerAnimationLoop: true,
                         title: 'Erorr',
                         btnOkText: 'delete',
-                        btnCancelText: 'eidt',
+                        btnCancelText: 'cancel',
+                        
                         desc:
                             'are sure you want to delete Item?',
                         btnOkOnPress: () async{
       
                         await FirebaseFirestore.instance
-      .collection('categories').doc(data[index].id).delete();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+      .collection('categories').doc(widget.catId).collection('note').doc(data[index].id).delete();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(catId: widget.catId,),));
                         },
                         btnCancelOnPress: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateCategorey(uid:data[index].id),));
-                         
+                          Navigator.pop(context)  ;
                         },
                       ).show();
+             
               },
+              onTap:() {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return UpdateNote(noteId:data[index].id, catId: widget.catId);
+                },));
+              },
+            
               child: GridTile(
                 child: Container(
                   width: 100,height: 70,
@@ -126,9 +122,9 @@ setState(() {
                   child: Column(
                     children: [
                       
-                      Icon(Icons.folder,size: 30,),
+                
                       SizedBox(height: 5,),
-                      Text(data[index]['name'].toString()),
+                      Text(data[index]['note'].toString()),
                     
                     ],
                   ),

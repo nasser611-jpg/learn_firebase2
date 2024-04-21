@@ -1,38 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:learn_firebase2/auth/homepage.dart';
+import 'package:learn_firebase2/note/view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-class UpdateCategorey extends StatefulWidget {
-  final String  uid;
-   UpdateCategorey({Key? key, required this.uid}) : super(key: key);
-
+class UpdateNote extends StatefulWidget {
+   UpdateNote({Key? key, required this.noteId, required this.catId}) : super(key: key);
+final String noteId;
+final String catId;
   @override
-  State<UpdateCategorey> createState() => _UpdateCategoreyState();
+  State<UpdateNote> createState() => _UpdateNoteState();
 }
 
-class _UpdateCategoreyState extends State<UpdateCategorey> {
-TextEditingController catController=TextEditingController();
+class _UpdateNoteState extends State<UpdateNote> {
+TextEditingController noteController=TextEditingController();
 
-      CollectionReference user= FirebaseFirestore.instance.collection('categories');
 
-  updateCategory()async{
+  updateNote()async{
 try{
-await  user.doc(widget.uid).update({
-'name':catController.text
+        CollectionReference collNote= FirebaseFirestore.instance.collection('categories').doc(widget.catId).collection('note');
+
+await  collNote.doc(widget.noteId) .  update({
+  'note':noteController.text,
+
 });
 
 }catch(e){
   print('Erorr $e');
 }
   }
-
+@override
+  void dispose() {
+ noteController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(title: Text('Add Category'),),
     body: Column(children: [
            TextFormField(
-                  controller: catController,
+                  controller: noteController,
                   decoration: InputDecoration(
                     labelText: 'catagory',
                     hintText: 'Enter your catagory',
@@ -49,8 +55,8 @@ await  user.doc(widget.uid).update({
                 ),
     
     TextButton(onPressed:(){
-      updateCategory();
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(),));
+      updateNote();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(catId: widget.catId,),));
     } , child: const Text('save'))
     ],),
     );

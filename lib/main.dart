@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:learn_firebase2/auth/loginn.dart';
-import 'package:learn_firebase2/auth/homepage.dart';
+import 'package:learn_firebase2/transaction/transction.dart';
 
 void main() async{
  WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +47,8 @@ FirebaseAuth.instance
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified? HomePage():Login()
+      home: Transction(),
+      // home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified? HomePage():Login()
     );
   }
 }
