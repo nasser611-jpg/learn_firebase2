@@ -11,24 +11,24 @@ import 'package:learn_firebase2/Custom_button_upload.dart';
 
 
 
-class AddNote extends StatefulWidget {
-   AddNote({Key? key, required this.docId}) : super(key: key);
+class AddImgWithNote extends StatefulWidget {
+   AddImgWithNote({Key? key, required this.docId}) : super(key: key);
 final String docId;
   @override
-  State<AddNote> createState() => _AddNoteState();
+  State<AddImgWithNote> createState() => _AddImgWithNoteState();
 }
 
-class _AddNoteState extends State<AddNote> {
+class _AddImgWithNoteState extends State<AddImgWithNote> {
 TextEditingController noteController=TextEditingController();
 
 
-  addNote()async{
+  AddImgWithNote()async{
 try{
         CollectionReference collNote= FirebaseFirestore.instance.collection('categories').doc(widget.docId).collection('note');
 
 DocumentReference response=await  collNote.add({
   'note':noteController.text,
-   'url':url??'none'
+   'url':url
 });
 
 }catch(e){
@@ -72,7 +72,7 @@ setState(() {
                  
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a note';
+                      return 'Please enter an note';
                     }
               
                     return null;
@@ -83,7 +83,7 @@ setState(() {
      await getImage();
     },),
     TextButton(onPressed:(){
-      addNote();
+      AddImgWithNote();
       Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(catId: widget.docId,),));
     } , child: const Text('Add'))
     ],),

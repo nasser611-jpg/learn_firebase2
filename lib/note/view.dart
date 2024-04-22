@@ -7,6 +7,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:learn_firebase2/auth/adminpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ViewNote extends StatefulWidget {
   const ViewNote({Key? key, required this.catId}) : super(key: key);
@@ -97,10 +98,13 @@ setState(() {
                         
                         desc:
                             'are sure you want to delete Item?',
-                        btnOkOnPress: () async{
-      
-                        await FirebaseFirestore.instance
-      .collection('categories').doc(widget.catId).collection('note').doc(data[index].id).delete();
+                        btnOkOnPress: () async{  
+                                          await FirebaseFirestore.instance
+     .collection('categories').doc(widget.catId).collection('note').doc(data[index].id).delete();
+          if(data[index]['url']!='none'){
+            FirebaseStorage.instance.refFromURL(data[index]['url']).delete();
+          }
+    
       Navigator.push(context, MaterialPageRoute(builder: (context) => ViewNote(catId: widget.catId,),));
                         },
                         btnCancelOnPress: () {
@@ -125,7 +129,8 @@ setState(() {
                 
                       SizedBox(height: 5,),
                       Text(data[index]['note'].toString()),
-                    
+                    if(data[index]['url']!="none")
+                    Image.network(data[index]['url'],width: 100,height: 100,fit: BoxFit.fill,)
                     ],
                   ),
                 ),
