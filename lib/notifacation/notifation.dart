@@ -14,7 +14,6 @@ class _NotifationState extends State<Notifation> {
 
     print('==================================');
     print('$myToken');
-    print('Failed to retrieve token');
   }
 
   @override
