@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:learn_firebase2/auth/loginn.dart';
-import 'package:learn_firebase2/notifacation/notifation.dart';
+import 'package:learn_firebase2/auth/homepage.dart';
 
 void main() async{
  WidgetsFlutterBinding.ensureInitialized();
@@ -41,15 +41,15 @@ FirebaseAuth.instance
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
- 
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MaterialApp(
+        theme: ThemeData(
+        primarySwatch: Colors.blue,
+        // Ensuring that app-wide icons are of a consistent color, you might adjust here as well
+        iconTheme: IconThemeData(color: Colors.white),
       ),
-    
-     home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified? Notifation():Login()
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+     home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified? HomePage():Login()
     );
   }
 }

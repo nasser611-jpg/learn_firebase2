@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:learn_firebase2/auth/loginn.dart';
-import 'package:learn_firebase2/auth/homepage.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -50,6 +49,7 @@ class _SignUpState extends State<SignUp> {
   if (e.code == 'weak-password') {
     print('The password provided is too weak.');
   } else if (e.code == 'email-already-in-use') {
+    
     showErrorDialog(context,'هذا الحساب مستخدم بالفعل');
     print('The account already exists for that email.');
   }
